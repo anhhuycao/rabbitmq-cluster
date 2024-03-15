@@ -12,13 +12,13 @@ Setup a RabbitMQ Cluster environment on your device using the pure [RabbitMQ](ht
 ## Quick start
 
 ```
-docker compose up
+make up
 ```
 
 Open http://localhost:15672 to login RabbitMQ dashboard.
 
-> Username: `guest`  
-> Password: `guest`
+> Username: `admin`  
+> Password: `admin`
 
 ## Configuration
 
@@ -40,14 +40,6 @@ Docker [compose](https://docs.docker.com/compose/compose-file/) config file, inc
 | `localhost:5672`  | AMQP 0-9-1 and AMQP 1.0 clients                     |
 | `localhost:15672` | HTTP API clients, management UI and `rabbitmqadmin` |
 
-### `.env`
-
-| Name                     | Default |
-| ------------------------ | ------- |
-| `RABBITMQ_DEFAULT_USER`  | guest   |
-| `RABBITMQ_DEFAULT_PASS`  | guest   |
-| `RABBITMQ_DEFAULT_VHOST` | /       |
-
 ### `.erlang.cookie`
 
 Put your custom [Erlang Cookie](https://www.rabbitmq.com/clustering.html#erlang-cookie) inside this file (default: `12345`) for the nodes in cluster communicate with each other.
@@ -60,7 +52,3 @@ Load balancer [HA Proxy](http://www.haproxy.org/) config. Including the load bal
 
 - [docker-rabbitmq-cluster](https://github.com/pardahlman/docker-rabbitmq-cluster)
 - [rabbitmq-cluster](https://github.com/JohnnyVicious/rabbitmq-cluster)
-
-## LICENSE
-
-MIT

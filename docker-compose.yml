@@ -1,19 +1,24 @@
 version: '3'
 services:
   rabbitmq1:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq1
     hostname: rabbitmq1
     environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
-      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+      - RABBITMQ_DEFAULT_VHOST=/
     volumes:
       - ./.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
       - ./cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
     entrypoint: /usr/local/bin/cluster-entrypoint.sh
+    ports:
+      - 0.0.0.0:5612:5672
+      - 0.0.0.0:15612:15672
 
   rabbitmq2:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq2
     hostname: rabbitmq2
     depends_on:
       - rabbitmq1
@@ -23,9 +28,13 @@ services:
       - ./.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
       - ./cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
     entrypoint: /usr/local/bin/cluster-entrypoint.sh
+    ports:
+      - 0.0.0.0:5622:5672
+      - 0.0.0.0:15622:15672
 
   rabbitmq3:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq3
     hostname: rabbitmq3
     depends_on:
       - rabbitmq1
@@ -35,9 +44,13 @@ services:
       - ./.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
       - ./cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
     entrypoint: /usr/local/bin/cluster-entrypoint.sh
+    ports:
+      - 0.0.0.0:5632:5672
+      - 0.0.0.0:15632:15672
 
   haproxy:
     image: haproxy:1.7
+    container_name: haproxy
     volumes:
       - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     depends_on:
